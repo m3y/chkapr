@@ -6,79 +6,108 @@ use std::collections::HashMap;
 /// data
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
-pub struct GithubResponse {
-    data: GithubData,
+pub struct Response {
+    data: Data,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
-struct GithubData {
-    repository: GithubRepository,
+struct Data {
+    repository: Repository,
 }
 
 /// repository
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
-struct GithubRepository {
+struct Repository {
     name: String,
-    pull_requests: HashMap<String, Vec<GithubPullRequests>>,
-    release: GithubRelease,
+    pull_requests: HashMap<String, Vec<PullRequest>>,
+    release: Release,
 }
 
 /// pull requests
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
-struct GithubPullRequests {
-    commits: HashMap<String, Vec<GithubCommits>>,
-    labels: HashMap<String, Vec<GithubLabels>>,
+struct PullRequest {
+    number: i32,
+    commits: HashMap<String, Vec<HashMap<String, Commit>>>,
+    labels: HashMap<String, Vec<Label>>,
+    reviews: HashMap<String, Vec<Review>>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
-struct GithubCommits {
-    commit: GithubCommit,
-}
-
-#[derive(Debug, Deserialize, Serialize)]
-#[serde(rename_all = "camelCase")]
-struct GithubCommit {
+struct Commit {
     oid: String,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
-struct GithubLabels {
+struct Label {
     name: String,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+struct Review {
+    author: Author,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+struct Author {
+    login: String,
+    organization: Organization,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+struct Organization {
+    team: Team,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+struct Team {
+    slug: String,
+    members: HashMap<String, Vec<Member>>,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+struct Member {
+    login: String,
 }
 
 /// release
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
-struct GithubRelease {
-    tag: GithubTag,
+struct Release {
+    tag: Tag,
     tag_name: String,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
-struct GithubTag {
-    target: GithubTarget,
+struct Tag {
+    target: Target,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
-struct GithubTarget {
+struct Target {
     oid: String,
-    parents: HashMap<String, Vec<GithubParents>>,
+    parents: HashMap<String, Vec<Parent>>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
-struct GithubParents {
+struct Parent {
     authored_by_committer: bool,
     oid: String,
 }
 
+/// query
 pub fn query(
     target: String,
     repository: String,
@@ -87,7 +116,7 @@ pub fn query(
     approvable_team: String,
     base_ref: String,
     head_ref: String,
-) -> Result<GithubResponse> {
+) -> Result<Response> {
     let client = reqwest::blocking::Client::builder()
         .user_agent("rust reqwest")
         .build()?;
@@ -169,5 +198,5 @@ pub fn query(
         .json(&request)
         .send()?;
 
-    resp.json::<GithubResponse>().context("error")
+    resp.json::<Response>().context("error")
 }

@@ -2,7 +2,7 @@ pub mod chkapr;
 
 use clap::{crate_authors, crate_description, crate_name, crate_version, ArgSettings, Clap};
 
-use crate::chkapr::github_repository;
+use crate::chkapr::github;
 
 #[derive(Clap, Debug)]
 #[clap(
@@ -56,7 +56,7 @@ struct Opts {
 fn main() {
     let opts = Opts::parse();
 
-    let result = github_repository::query(
+    let response = github::query(
         opts.target,
         opts.repository,
         opts.github_token,
@@ -66,5 +66,5 @@ fn main() {
         opts.head_ref,
     );
 
-    println!("{:?}", result);
+    println!("{:?}", response);
 }

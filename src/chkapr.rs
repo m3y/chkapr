@@ -1,2 +1,2 @@
-pub mod github_repository;
+pub mod github;
 pub mod pull_requests;
