@@ -12,4 +12,3 @@ anyhow = "1.0.32"
 reqwest = { version = "0.10.8", features = ["blocking", "json"] }
 serde = { version = "1.0.116", features = ["derive"] }
 serde_json = "1.0.57"
-async-std = { version = "1.6.1", features = ["attributes"] }
