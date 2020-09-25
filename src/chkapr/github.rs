@@ -121,7 +121,7 @@ pub fn query(
         .user_agent("rust reqwest")
         .build()?;
     let query = r#"
-        query ($owner: String = "Pay-Baymax", $team: String = "tech-leads", $base: String = "pay2release", $head: String = "master", $name: String!, $tagName: String!) {
+        query ($owner: String!, $team: String!, $base: String!, $head: String!, $name: String!, $tagName: String!) {
           repository(name: $name, owner: $owner) {
             name
             pullRequests(first: 5, baseRefName: $base, headRefName: $head, orderBy: {field: CREATED_AT, direction: DESC}) {
