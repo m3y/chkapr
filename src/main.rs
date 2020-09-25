@@ -55,7 +55,7 @@ struct Opts {
 
 fn main() {
     let opts = Opts::parse();
-    println!("{:#?}", opts);
+
     let result = github_repository::query(
         opts.target,
         opts.repository,
@@ -66,5 +66,5 @@ fn main() {
         opts.head_ref,
     );
 
-    println!("{}", result);
+    println!("{:?}", result);
 }
