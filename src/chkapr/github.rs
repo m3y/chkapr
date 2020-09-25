@@ -21,8 +21,8 @@ struct Data {
 #[serde(rename_all = "camelCase")]
 struct Repository {
     name: String,
-    pull_requests: HashMap<String, Vec<PullRequest>>,
-    release: Release,
+    pull_requests: HashMap<String, Option<Vec<PullRequest>>>,
+    release: Option<Release>,
 }
 
 /// pull requests
@@ -31,8 +31,8 @@ struct Repository {
 struct PullRequest {
     number: i32,
     commits: HashMap<String, Vec<HashMap<String, Commit>>>,
-    labels: HashMap<String, Vec<Label>>,
-    reviews: HashMap<String, Vec<Review>>,
+    labels: HashMap<String, Option<Vec<Label>>>,
+    reviews: HashMap<String, Option<Vec<Review>>>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -63,7 +63,7 @@ struct Author {
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 struct Organization {
-    team: Team,
+    team: Option<Team>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -83,8 +83,25 @@ struct Member {
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 struct Release {
-    tag: Tag,
     tag_name: String,
+    tag: Tag,
+}
+
+impl Release {
+    fn is_valid(&self) -> bool {
+        self.tag_name != "" && self.tag.target.oid != ""
+    }
+
+    fn to_string(&self) -> String {
+        if self.is_valid() {
+            return format!("{}({})", self.tag_name, self.tag.target.oid);
+        }
+
+        format!(
+            "The structure of release is not correct. [name: {}]",
+            self.tag_name
+        )
+    }
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -97,7 +114,7 @@ struct Tag {
 #[serde(rename_all = "camelCase")]
 struct Target {
     oid: String,
-    parents: HashMap<String, Vec<Parent>>,
+    parents: HashMap<String, Option<Vec<Parent>>>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -199,4 +216,66 @@ pub fn query(
         .send()?;
 
     resp.json::<Response>().context("error")
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_release_is_valid() {
+        assert_eq!(false, Release::new("", "", "", false).is_valid());
+        assert_eq!(
+            false,
+            Release::new("canary_release", "", "", false).is_valid()
+        );
+        assert_eq!(
+            false,
+            Release::new("", "xxxxyyyyzzzz", "", false).is_valid()
+        );
+        assert_eq!(
+            true,
+            Release::new("canary_release", "xxxxyyyyzzzz", "", false).is_valid()
+        );
+    }
+
+    #[test]
+    fn test_release_to_string() {
+        assert_eq!(
+            "canary_release(xxxxxyyyyyzzzzz)",
+            Release::new("canary_release", "xxxxxyyyyyzzzzz", "", false).to_string()
+        );
+        assert_eq!(
+            "The structure of release is not correct. [name: ]",
+            Release::new("", "", "", false).to_string()
+        );
+    }
+
+    // for test
+    impl Release {
+        fn new(
+            tag_name: &str,
+            oid: &str,
+            parent_oid: &str,
+            authored_by_committer: bool,
+        ) -> Release {
+            let mut parents = HashMap::new();
+            parents.insert(
+                "nodes".to_string(),
+                Some(vec![Parent {
+                    oid: parent_oid.to_string(),
+                    authored_by_committer: authored_by_committer,
+                }]),
+            );
+            Release {
+                tag_name: tag_name.to_string(),
+                tag: Tag {
+                    target: Target {
+                        oid: oid.to_string(),
+                        parents: parents,
+                    },
+                },
+            }
+        }
+    }
 }
