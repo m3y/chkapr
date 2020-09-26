@@ -12,44 +12,36 @@ use crate::chkapr::github;
     about = crate_description!()
 )]
 struct Opts {
+    /// github token
     #[clap(
         long,
         env = "GITHUB_TOKEN",
         setting = ArgSettings::HideEnvValues,
-        about = "github token"
     )]
     github_token: String,
-    #[clap(long, env = "TARGET", about = "target tag and label.")]
+
+    /// target tag and label
+    #[clap(long, env = "TARGET")]
     target: String,
-    #[clap(long, env = "TARGET_REPO", about = "target repository name.")]
+
+    /// target repository name
+    #[clap(long, env = "TARGET_REPO")]
     repository: String,
-    #[clap(
-        long,
-        env = "BASE_REF",
-        default_value = "pay2release",
-        about = "base ref name."
-    )]
+
+    /// base ref name
+    #[clap(long, env = "BASE_REF", default_value = "pay2release")]
     base_ref: String,
-    #[clap(
-        long,
-        env = "HEAD_REF",
-        default_value = "master",
-        about = "head ref name."
-    )]
+
+    /// head ref name
+    #[clap(long, env = "HEAD_REF", default_value = "master")]
     head_ref: String,
-    #[clap(
-        long,
-        env = "ORGANIZATION",
-        default_value = "Pay-Baymax",
-        about = "organization name."
-    )]
+
+    /// organization name
+    #[clap(long, env = "ORGANIZATION", default_value = "Pay-Baymax")]
     organization: String,
-    #[clap(
-        long,
-        env = "APPROVABLE_TEAM",
-        default_value = "tech-leads",
-        about = "an approvable team."
-    )]
+
+    /// an approvable team
+    #[clap(long, env = "APPROVABLE_TEAM", default_value = "tech-leads")]
     approvable_team: String,
 }
 
