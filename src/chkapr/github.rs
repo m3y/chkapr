@@ -10,6 +10,25 @@ pub struct Response {
     data: Data,
 }
 
+impl Response {
+    fn get_repository(&self) -> &Repository {
+        &self.data.repository
+    }
+
+    fn get_pull_requests(&self) -> Option<&Vec<PullRequest>> {
+        self.data
+            .repository
+            .pull_requests
+            .get("nodes")
+            .unwrap()
+            .as_ref()
+    }
+
+    fn get_release(&self) -> Option<&Release> {
+        self.data.repository.release.as_ref()
+    }
+}
+
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 struct Data {
@@ -33,6 +52,44 @@ struct PullRequest {
     commits: HashMap<String, Vec<HashMap<String, Commit>>>,
     labels: HashMap<String, Option<Vec<Label>>>,
     reviews: HashMap<String, Option<Vec<Review>>>,
+}
+
+impl PullRequest {
+    fn is_valid(&self) -> bool {
+        match self.commits.get("nodes") {
+            Some(v) => v.len() != 0,
+            None => false,
+        }
+    }
+
+    fn to_message(&self) -> String {
+        format!("Pull Requests (#{})", self.number)
+    }
+
+    fn has_commit(&self, commit_hash: String) -> bool {
+        match self.commits.get("nodes") {
+            Some(v) => v
+                .iter()
+                .filter(|h| h.get("commit").is_some())
+                .map(|h| h.get("commit").unwrap())
+                .any(|c| c.oid == commit_hash),
+            None => false,
+        }
+    }
+
+    fn has_label(&self, label: String) -> bool {
+        match self.labels.get("nodes") {
+            Some(ov) => match ov {
+                Some(v) => v.iter().any(|l| l.name == label),
+                None => false,
+            },
+            None => false,
+        }
+    }
+
+    fn is_approved(&self) -> bool {
+        true
+    }
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -92,7 +149,7 @@ impl Release {
         self.tag_name != "" && self.tag.target.oid != ""
     }
 
-    fn to_string(&self) -> String {
+    fn to_message(&self) -> String {
         if self.is_valid() {
             return format!("{}({})", self.tag_name, self.tag.target.oid);
         }
@@ -241,26 +298,78 @@ mod tests {
     }
 
     #[test]
-    fn test_release_to_string() {
+    fn test_release_is_valid_from_response() {
+        let response = Response::from_jsonfile(PathBuf::from("tests/fixtures/test_data.json"));
+        match response.get_release() {
+            Some(release) => assert_eq!(true, release.is_valid()),
+            None => assert!(false),
+        }
+    }
+
+    #[test]
+    fn test_release_to_message() {
         assert_eq!(
             "canary_release(xxxxxyyyyyzzzzz)",
-            Release::new("canary_release", "xxxxxyyyyyzzzzz", "", false).to_string()
+            Release::new("canary_release", "xxxxxyyyyyzzzzz", "", false).to_message()
         );
         assert_eq!(
             "The structure of release is not correct. [name: ]",
-            Release::new("", "", "", false).to_string()
+            Release::new("", "", "", false).to_message()
+        );
+    }
+
+    #[test]
+    fn test_pull_requests_is_valid() {
+        let response = Response::from_jsonfile(PathBuf::from("tests/fixtures/test_data.json"));
+        let pull_request = response.get_pull_requests().unwrap().get(0);
+
+        assert_eq!(true, pull_request.unwrap().is_valid());
+    }
+
+    #[test]
+    fn test_pull_requests_has_commit() {
+        let response = Response::from_jsonfile(PathBuf::from("tests/fixtures/test_data.json"));
+        let pull_request = response.get_pull_requests().unwrap().get(0);
+
+        assert_eq!(
+            true,
+            pull_request
+                .unwrap()
+                .has_commit("9ff12322cd86e6dc1f254209c04f4dde40876588".to_string())
+        );
+
+        assert_eq!(
+            false,
+            pull_request
+                .unwrap()
+                .has_commit("c04f4dde408765889ff12322cd86e6dc1f254209".to_string())
+        );
+    }
+
+    #[test]
+    fn test_pull_requests_has_label() {
+        let response = Response::from_jsonfile(PathBuf::from("tests/fixtures/test_data.json"));
+        let pull_request = response.get_pull_requests().unwrap().get(0);
+
+        assert_eq!(
+            true,
+            pull_request
+                .unwrap()
+                .has_label("canary_release".to_string())
+        );
+
+        assert_eq!(
+            false,
+            pull_request
+                .unwrap()
+                .has_label("canary_rollback".to_string())
         );
     }
 
     #[test]
     fn test_parse() {
-        assert_eq!(
-            "sre-test-k8s",
-            Response::from_jsonfile(PathBuf::from("tests/fixtures/test_data.json"))
-                .data
-                .repository
-                .name
-        );
+        let response = Response::from_jsonfile(PathBuf::from("tests/fixtures/test_data.json"));
+        assert_eq!("sre-test-k8s", response.get_repository().name);
     }
 
     use std::fs::File;
