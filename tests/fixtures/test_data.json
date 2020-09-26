@@ -1,0 +1,551 @@
+{
+  "data": {
+    "repository": {
+      "name": "sre-test-k8s",
+      "pullRequests": {
+        "nodes": [
+          {
+            "commits": {
+              "nodes": [
+                {
+                  "commit": {
+                    "oid": "bcee10128e4e8bf0a72cb9c92507262ba3816e5c"
+                  }
+                },
+                {
+                  "commit": {
+                    "oid": "9ff12322cd86e6dc1f254209c04f4dde40876588"
+                  }
+                },
+                {
+                  "commit": {
+                    "oid": "3ac12cb4a70c9321514a2070b45521ab9aea9338"
+                  }
+                },
+                {
+                  "commit": {
+                    "oid": "19ab2af810022ae977928f29a4e3bcac75b68092"
+                  }
+                },
+                {
+                  "commit": {
+                    "oid": "6ae85892cce0ff0c3d1a12acd8eaa1e33dea2d5e"
+                  }
+                },
+                {
+                  "commit": {
+                    "oid": "2e4e879c2955cd6c3af05525f8ef84927236bd1d"
+                  }
+                },
+                {
+                  "commit": {
+                    "oid": "46f663b32c01d20ce14f58b5d81ac0f813c4b691"
+                  }
+                }
+              ]
+            },
+            "labels": {
+              "nodes": [
+                {
+                  "name": "canary_release"
+                },
+                {
+                  "name": "pass_manual_test"
+                },
+                {
+                  "name": "prod_release"
+                },
+                {
+                  "name": "unlock"
+                }
+              ]
+            },
+            "number": 624,
+            "reviews": {
+              "nodes": [
+                {
+                  "author": {
+                    "login": "paypay-ci",
+                    "organization": {
+                      "team": {
+                        "members": {
+                          "nodes": [
+                            {
+                              "login": "akehoyayoi"
+                            },
+                            {
+                              "login": "niyuna"
+                            },
+                            {
+                              "login": "harspras"
+                            },
+                            {
+                              "login": "keisyama"
+                            },
+                            {
+                              "login": "ShigeoSakamoto"
+                            },
+                            {
+                              "login": "shileiLong"
+                            },
+                            {
+                              "login": "shreyanshp"
+                            },
+                            {
+                              "login": "xoyo24"
+                            },
+                            {
+                              "login": "Tetsuya3850"
+                            },
+                            {
+                              "login": "pe-imasaki"
+                            },
+                            {
+                              "login": "mune-hirakawa"
+                            },
+                            {
+                              "login": "shokonno"
+                            },
+                            {
+                              "login": "ttamari"
+                            },
+                            {
+                              "login": "YoshimitsuSakui"
+                            },
+                            {
+                              "login": "ytsunoda-paypay"
+                            },
+                            {
+                              "login": "chengkun-pp"
+                            },
+                            {
+                              "login": "shaopay"
+                            },
+                            {
+                              "login": "paypay-ci"
+                            },
+                            {
+                              "login": "tommy810pp"
+                            },
+                            {
+                              "login": "chao-chang-paypay"
+                            },
+                            {
+                              "login": "zherenyu831"
+                            },
+                            {
+                              "login": "mike-traff-paypay"
+                            }
+                          ]
+                        },
+                        "slug": "tech-leads"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "commits": {
+              "nodes": [
+                {
+                  "commit": {
+                    "oid": "bcee10128e4e8bf0a72cb9c92507262ba3816e5c"
+                  }
+                },
+                {
+                  "commit": {
+                    "oid": "9ff12322cd86e6dc1f254209c04f4dde40876588"
+                  }
+                },
+                {
+                  "commit": {
+                    "oid": "3ac12cb4a70c9321514a2070b45521ab9aea9338"
+                  }
+                },
+                {
+                  "commit": {
+                    "oid": "19ab2af810022ae977928f29a4e3bcac75b68092"
+                  }
+                },
+                {
+                  "commit": {
+                    "oid": "6ae85892cce0ff0c3d1a12acd8eaa1e33dea2d5e"
+                  }
+                },
+                {
+                  "commit": {
+                    "oid": "2e4e879c2955cd6c3af05525f8ef84927236bd1d"
+                  }
+                },
+                {
+                  "commit": {
+                    "oid": "46f663b32c01d20ce14f58b5d81ac0f813c4b691"
+                  }
+                }
+              ]
+            },
+            "labels": {
+              "nodes": []
+            },
+            "number": 623,
+            "reviews": {
+              "nodes": []
+            }
+          },
+          {
+            "commits": {
+              "nodes": [
+                {
+                  "commit": {
+                    "oid": "bcee10128e4e8bf0a72cb9c92507262ba3816e5c"
+                  }
+                },
+                {
+                  "commit": {
+                    "oid": "9ff12322cd86e6dc1f254209c04f4dde40876588"
+                  }
+                },
+                {
+                  "commit": {
+                    "oid": "3ac12cb4a70c9321514a2070b45521ab9aea9338"
+                  }
+                },
+                {
+                  "commit": {
+                    "oid": "19ab2af810022ae977928f29a4e3bcac75b68092"
+                  }
+                }
+              ]
+            },
+            "labels": {
+              "nodes": [
+                {
+                  "name": "canary_release"
+                }
+              ]
+            },
+            "number": 622,
+            "reviews": {
+              "nodes": [
+                {
+                  "author": {
+                    "login": "paypay-ci",
+                    "organization": {
+                      "team": {
+                        "members": {
+                          "nodes": [
+                            {
+                              "login": "akehoyayoi"
+                            },
+                            {
+                              "login": "niyuna"
+                            },
+                            {
+                              "login": "harspras"
+                            },
+                            {
+                              "login": "keisyama"
+                            },
+                            {
+                              "login": "ShigeoSakamoto"
+                            },
+                            {
+                              "login": "shileiLong"
+                            },
+                            {
+                              "login": "shreyanshp"
+                            },
+                            {
+                              "login": "xoyo24"
+                            },
+                            {
+                              "login": "Tetsuya3850"
+                            },
+                            {
+                              "login": "pe-imasaki"
+                            },
+                            {
+                              "login": "mune-hirakawa"
+                            },
+                            {
+                              "login": "shokonno"
+                            },
+                            {
+                              "login": "ttamari"
+                            },
+                            {
+                              "login": "YoshimitsuSakui"
+                            },
+                            {
+                              "login": "ytsunoda-paypay"
+                            },
+                            {
+                              "login": "chengkun-pp"
+                            },
+                            {
+                              "login": "shaopay"
+                            },
+                            {
+                              "login": "paypay-ci"
+                            },
+                            {
+                              "login": "tommy810pp"
+                            },
+                            {
+                              "login": "chao-chang-paypay"
+                            },
+                            {
+                              "login": "zherenyu831"
+                            },
+                            {
+                              "login": "mike-traff-paypay"
+                            }
+                          ]
+                        },
+                        "slug": "tech-leads"
+                      }
+                    }
+                  }
+                },
+                {
+                  "author": {
+                    "login": "paypay-ci",
+                    "organization": {
+                      "team": {
+                        "members": {
+                          "nodes": [
+                            {
+                              "login": "akehoyayoi"
+                            },
+                            {
+                              "login": "niyuna"
+                            },
+                            {
+                              "login": "harspras"
+                            },
+                            {
+                              "login": "keisyama"
+                            },
+                            {
+                              "login": "ShigeoSakamoto"
+                            },
+                            {
+                              "login": "shileiLong"
+                            },
+                            {
+                              "login": "shreyanshp"
+                            },
+                            {
+                              "login": "xoyo24"
+                            },
+                            {
+                              "login": "Tetsuya3850"
+                            },
+                            {
+                              "login": "pe-imasaki"
+                            },
+                            {
+                              "login": "mune-hirakawa"
+                            },
+                            {
+                              "login": "shokonno"
+                            },
+                            {
+                              "login": "ttamari"
+                            },
+                            {
+                              "login": "YoshimitsuSakui"
+                            },
+                            {
+                              "login": "ytsunoda-paypay"
+                            },
+                            {
+                              "login": "chengkun-pp"
+                            },
+                            {
+                              "login": "shaopay"
+                            },
+                            {
+                              "login": "paypay-ci"
+                            },
+                            {
+                              "login": "tommy810pp"
+                            },
+                            {
+                              "login": "chao-chang-paypay"
+                            },
+                            {
+                              "login": "zherenyu831"
+                            },
+                            {
+                              "login": "mike-traff-paypay"
+                            }
+                          ]
+                        },
+                        "slug": "tech-leads"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "commits": {
+              "nodes": [
+                {
+                  "commit": {
+                    "oid": "bcee10128e4e8bf0a72cb9c92507262ba3816e5c"
+                  }
+                },
+                {
+                  "commit": {
+                    "oid": "9ff12322cd86e6dc1f254209c04f4dde40876588"
+                  }
+                },
+                {
+                  "commit": {
+                    "oid": "3ac12cb4a70c9321514a2070b45521ab9aea9338"
+                  }
+                }
+              ]
+            },
+            "labels": {
+              "nodes": []
+            },
+            "number": 621,
+            "reviews": {
+              "nodes": []
+            }
+          },
+          {
+            "commits": {
+              "nodes": [
+                {
+                  "commit": {
+                    "oid": "bcee10128e4e8bf0a72cb9c92507262ba3816e5c"
+                  }
+                },
+                {
+                  "commit": {
+                    "oid": "9ff12322cd86e6dc1f254209c04f4dde40876588"
+                  }
+                }
+              ]
+            },
+            "labels": {
+              "nodes": [
+                {
+                  "name": "canary_release"
+                }
+              ]
+            },
+            "number": 620,
+            "reviews": {
+              "nodes": [
+                {
+                  "author": {
+                    "login": "paypay-ci",
+                    "organization": {
+                      "team": {
+                        "members": {
+                          "nodes": [
+                            {
+                              "login": "akehoyayoi"
+                            },
+                            {
+                              "login": "niyuna"
+                            },
+                            {
+                              "login": "harspras"
+                            },
+                            {
+                              "login": "keisyama"
+                            },
+                            {
+                              "login": "ShigeoSakamoto"
+                            },
+                            {
+                              "login": "shileiLong"
+                            },
+                            {
+                              "login": "shreyanshp"
+                            },
+                            {
+                              "login": "xoyo24"
+                            },
+                            {
+                              "login": "Tetsuya3850"
+                            },
+                            {
+                              "login": "pe-imasaki"
+                            },
+                            {
+                              "login": "mune-hirakawa"
+                            },
+                            {
+                              "login": "shokonno"
+                            },
+                            {
+                              "login": "ttamari"
+                            },
+                            {
+                              "login": "YoshimitsuSakui"
+                            },
+                            {
+                              "login": "ytsunoda-paypay"
+                            },
+                            {
+                              "login": "chengkun-pp"
+                            },
+                            {
+                              "login": "shaopay"
+                            },
+                            {
+                              "login": "paypay-ci"
+                            },
+                            {
+                              "login": "tommy810pp"
+                            },
+                            {
+                              "login": "chao-chang-paypay"
+                            },
+                            {
+                              "login": "zherenyu831"
+                            },
+                            {
+                              "login": "mike-traff-paypay"
+                            }
+                          ]
+                        },
+                        "slug": "tech-leads"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "release": {
+        "tag": {
+          "target": {
+            "oid": "46f663b32c01d20ce14f58b5d81ac0f813c4b691",
+            "parents": {
+              "nodes": [
+                {
+                  "authoredByCommitter": true,
+                  "oid": "2e4e879c2955cd6c3af05525f8ef84927236bd1d"
+                }
+              ]
+            }
+          }
+        },
+        "tagName": "canary_release"
+      }
+    }
+  }
+}

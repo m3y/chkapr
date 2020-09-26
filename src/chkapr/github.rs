@@ -1,4 +1,4 @@
-use anyhow::{Context, Result};
+use anyhow::Result;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
 use std::collections::HashMap;
@@ -250,6 +250,29 @@ mod tests {
             "The structure of release is not correct. [name: ]",
             Release::new("", "", "", false).to_string()
         );
+    }
+
+    #[test]
+    fn test_parse() {
+        assert_eq!(
+            "sre-test-k8s",
+            Response::from_jsonfile(PathBuf::from("tests/fixtures/test_data.json"))
+                .data
+                .repository
+                .name
+        );
+    }
+
+    use std::fs::File;
+    use std::io::BufReader;
+    use std::path::PathBuf;
+
+    impl Response {
+        fn from_jsonfile(path: PathBuf) -> Response {
+            let f = File::open(path).unwrap();
+            let reader = BufReader::new(f);
+            serde_json::from_reader(reader).unwrap()
+        }
     }
 
     // for test
