@@ -125,7 +125,7 @@ struct Parent {
 }
 
 /// query
-pub fn query(
+pub async fn query(
     target: String,
     repository: String,
     github_token: String,
@@ -134,7 +134,7 @@ pub fn query(
     base_ref: String,
     head_ref: String,
 ) -> Result<Response> {
-    let client = reqwest::blocking::Client::builder()
+    let client = reqwest::Client::builder()
         .user_agent("rust reqwest")
         .build()?;
     let query = r#"
@@ -209,13 +209,14 @@ pub fn query(
         }
     });
 
-    let resp = client
+    Ok(client
         .post("https://api.github.com/graphql")
         .bearer_auth(github_token)
         .json(&request)
-        .send()?;
-
-    resp.json::<Response>().context("error")
+        .send()
+        .await?
+        .json::<Response>()
+        .await?)
 }
 
 #[cfg(test)]

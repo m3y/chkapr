@@ -45,7 +45,8 @@ struct Opts {
     approvable_team: String,
 }
 
-fn main() {
+#[tokio::main]
+async fn main() {
     let opts = Opts::parse();
 
     let response = github::query(
@@ -56,7 +57,8 @@ fn main() {
         opts.approvable_team,
         opts.base_ref,
         opts.head_ref,
-    );
+    )
+    .await;
 
     println!("{:?}", response);
 }
