@@ -3,7 +3,6 @@ use serde::{Deserialize, Serialize};
 use serde_json::json;
 use std::collections::HashMap;
 
-/// data
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Response {
@@ -16,7 +15,6 @@ struct Data {
     repository: Repository,
 }
 
-/// repository
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 struct Repository {
@@ -25,7 +23,6 @@ struct Repository {
     release: Option<Release>,
 }
 
-/// pull requests
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct PullRequest {
@@ -79,7 +76,6 @@ struct Member {
     login: String,
 }
 
-/// release
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Release {
@@ -216,7 +212,7 @@ impl Release {
         }
     }
 
-    fn _to_message(&self) -> String {
+    pub fn to_message(&self) -> String {
         if self.is_valid() {
             return format!("{}({})", self.tag_name, self.tag.target.oid);
         }

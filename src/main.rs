@@ -69,6 +69,7 @@ async fn main() {
                 return ();
             }
             let release = r.unwrap();
+            println!("{}", release.to_message());
 
             let pull_requests = resp.get_pull_requests();
             if pull_requests.is_none() {
@@ -89,6 +90,4 @@ async fn main() {
                 .for_each(|pr| println!("Approval: {}", pr.to_message()));
         }
     }
-
-    // println!("{:?}", response);
 }
