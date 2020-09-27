@@ -61,12 +61,15 @@ async fn main() {
     .await;
 
     match &response {
-        Err(e) => eprintln!("{:#?}", e),
+        Err(e) => {
+            eprintln!("{:#?}", e);
+            std::process::exit(1);
+        }
         Ok(resp) => {
             let r = resp.get_release();
             if !r.map_or(false, |r| r.is_valid()) {
                 eprintln!("release error");
-                return ();
+                std::process::exit(1);
             }
             let release = r.unwrap();
             println!("{}", release.to_message());
@@ -74,7 +77,7 @@ async fn main() {
             let pull_requests = resp.get_pull_requests();
             if pull_requests.is_none() {
                 eprintln!("pr error");
-                return ();
+                std::process::exit(1);
             }
 
             pull_requests
@@ -88,6 +91,8 @@ async fn main() {
                 })
                 .filter(|pr| pr.is_approved())
                 .for_each(|pr| println!("Approval: {}", pr.to_message()));
+
+            std::process::exit(exitcode::OK);
         }
     }
 }
