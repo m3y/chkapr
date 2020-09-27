@@ -60,5 +60,35 @@ async fn main() {
     )
     .await;
 
-    println!("{:?}", response);
+    match &response {
+        Err(e) => eprintln!("{:#?}", e),
+        Ok(resp) => {
+            let r = resp.get_release();
+            if !r.map_or(false, |r| r.is_valid()) {
+                eprintln!("release error");
+                return ();
+            }
+            let release = r.unwrap();
+
+            let pull_requests = resp.get_pull_requests();
+            if pull_requests.is_none() {
+                eprintln!("pr error");
+                return ();
+            }
+
+            pull_requests
+                .unwrap()
+                .iter()
+                .filter(|pr| pr.is_valid())
+                .filter(|pr| pr.has_label(release.get_tag_name().into()))
+                .filter(|pr| {
+                    pr.has_commit(release.get_oid().into())
+                        || release.get_parent_oid().map_or(false, |o| pr.has_commit(o))
+                })
+                .filter(|pr| pr.is_approved())
+                .for_each(|pr| println!("Approval: {}", pr.to_message()));
+        }
+    }
+
+    // println!("{:?}", response);
 }

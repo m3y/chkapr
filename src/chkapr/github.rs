@@ -28,7 +28,7 @@ struct Repository {
 /// pull requests
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
-struct PullRequest {
+pub struct PullRequest {
     number: i32,
     commits: HashMap<String, Vec<HashMap<String, Commit>>>,
     labels: HashMap<String, Option<Vec<Label>>>,
@@ -82,8 +82,8 @@ struct Member {
 /// release
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
-struct Release {
-    tag_name: String,
+pub struct Release {
+    pub tag_name: String,
     tag: Tag,
 }
 
@@ -108,11 +108,7 @@ struct Parent {
 }
 
 impl Response {
-    fn get_repository(&self) -> &Repository {
-        &self.data.repository
-    }
-
-    fn get_pull_requests(&self) -> Option<&Vec<PullRequest>> {
+    pub fn get_pull_requests(&self) -> Option<&Vec<PullRequest>> {
         self.data
             .repository
             .pull_requests
@@ -121,24 +117,24 @@ impl Response {
             .as_ref()
     }
 
-    fn get_release(&self) -> Option<&Release> {
+    pub fn get_release(&self) -> Option<&Release> {
         self.data.repository.release.as_ref()
     }
 }
 
 impl PullRequest {
-    fn is_valid(&self) -> bool {
+    pub fn is_valid(&self) -> bool {
         match self.commits.get("nodes") {
             Some(v) => v.len() != 0,
             None => false,
         }
     }
 
-    fn to_message(&self) -> String {
+    pub fn to_message(&self) -> String {
         format!("Pull Requests (#{})", self.number)
     }
 
-    fn has_commit(&self, commit_hash: String) -> bool {
+    pub fn has_commit(&self, commit_hash: String) -> bool {
         match self.commits.get("nodes") {
             Some(v) => v
                 .iter()
@@ -148,8 +144,7 @@ impl PullRequest {
             None => false,
         }
     }
-
-    fn has_label(&self, label: String) -> bool {
+    pub fn has_label(&self, label: String) -> bool {
         match self.labels.get("nodes") {
             Some(ov) => match ov {
                 Some(v) => v.iter().any(|l| l.name == label),
@@ -159,7 +154,7 @@ impl PullRequest {
         }
     }
 
-    fn is_approved(&self) -> bool {
+    pub fn is_approved(&self) -> bool {
         match self.reviews.get("nodes") {
             Some(ov) => match ov {
                 Some(v) => v.iter().any(|r| r.is_approved()),
@@ -192,11 +187,36 @@ impl Review {
 }
 
 impl Release {
-    fn is_valid(&self) -> bool {
+    pub fn is_valid(&self) -> bool {
         self.tag_name != "" && self.tag.target.oid != ""
     }
 
-    fn to_message(&self) -> String {
+    pub fn get_tag_name(&self) -> &String {
+        &self.tag_name
+    }
+
+    pub fn get_oid(&self) -> &String {
+        &self.tag.target.oid
+    }
+
+    pub fn get_parent_oid(&self) -> Option<String> {
+        match self.tag.target.parents.get("nodes") {
+            Some(parents_nodes) => match parents_nodes {
+                Some(parents) => {
+                    let oids = parents
+                        .iter()
+                        .filter(|p| p.authored_by_committer)
+                        .map(|p| &p.oid)
+                        .collect::<Vec<_>>();
+                    Some(oids[0].to_string())
+                }
+                None => None,
+            },
+            None => None,
+        }
+    }
+
+    fn _to_message(&self) -> String {
         if self.is_valid() {
             return format!("{}({})", self.tag_name, self.tag.target.oid);
         }
@@ -426,7 +446,7 @@ mod tests {
     #[test]
     fn test_parse() {
         let response = Response::from_jsonfile(PathBuf::from("tests/fixtures/test_data.json"));
-        assert_eq!("sre-test-k8s", response.get_repository().name);
+        assert_eq!("sre-test-k8s", response.data.repository.name);
     }
 
     use std::fs::File;
