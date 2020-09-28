@@ -195,10 +195,9 @@ impl Team {
 impl Review {
     fn is_approved(&self) -> bool {
         let login = &self.author.login;
-        if let Some(approvable_team) = &self.author.organization.team {
-            approvable_team.has_member(login.into())
-        } else {
-            false
+        match &self.author.organization.team {
+            Some(approvable_team) => approvable_team.has_member(login.into()),
+            None => false,
         }
     }
 }
@@ -218,14 +217,11 @@ impl Release {
 
     pub fn get_parent_oid(&self) -> Option<String> {
         match &self.tag.target.parents.nodes {
-            Some(parents) => {
-                let oids = parents
-                    .iter()
-                    .filter(|p| p.authored_by_committer)
-                    .map(|p| &p.oid)
-                    .collect::<Vec<_>>();
-                Some(oids[0].to_string())
-            }
+            Some(parents) => parents
+                .iter()
+                .filter(|p| p.authored_by_committer)
+                .map(|p| p.oid.to_string())
+                .last(),
             None => None,
         }
     }
@@ -414,11 +410,10 @@ mod tests {
         );
     }
 
-    #[test]
+    //#[test]
     //fn test_team_has_member() {
-    //    let response = Response::from_jsonfile(PathBuf::from("tests/fixtures/test_data.json"));
-    //    let pull_request = response.get_pull_requests().unwrap().get(0);
-    //    let reviews = pull_request.unwrap().reviews.nodes.unwrap();
+    // let response = Response::from_jsonfile(PathBuf::from("tests/fixtures/test_data.json"));
+    // let pull_request = response.get_pull_requests().unwrap().get(0);
     //    let review = reviews.get(0).unwrap();
     //    //let team = review.author.organization.team.as_ref();
 
@@ -441,6 +436,7 @@ mod tests {
     //            .has_member("m3y".to_string())
     //    );
     //}
+
     //#[test]
     //fn test_review_is_approved() {
     //    let response = Response::from_jsonfile(PathBuf::from("tests/fixtures/test_data.json"));
