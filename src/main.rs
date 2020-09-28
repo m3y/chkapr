@@ -80,7 +80,7 @@ async fn main() {
                 std::process::exit(1);
             }
 
-            pull_requests
+            let approved_pull_request = pull_requests
                 .unwrap()
                 .iter()
                 .filter(|pr| pr.is_valid())
@@ -90,7 +90,17 @@ async fn main() {
                         || release.get_parent_oid().map_or(false, |o| pr.has_commit(o))
                 })
                 .filter(|pr| pr.is_approved())
-                .for_each(|pr| println!("Approval: {}", pr.to_message()));
+                .map(|pr| pr.to_message())
+                .collect::<Vec<_>>();
+
+            if approved_pull_request.is_empty() {
+                eprintln!("not approved");
+                std::process::exit(1);
+            }
+
+            approved_pull_request
+                .iter()
+                .for_each(|m| println!("Approval: {}", m));
 
             std::process::exit(exitcode::OK);
         }
