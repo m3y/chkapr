@@ -323,22 +323,9 @@ pub async fn query(
 mod tests {
     use super::*;
 
-    #[test]
-    fn test_release_is_valid() {
-        assert_eq!(false, Release::new("", "", "", false).is_valid());
-        assert_eq!(
-            false,
-            Release::new("canary_release", "", "", false).is_valid()
-        );
-        assert_eq!(
-            false,
-            Release::new("", "xxxxyyyyzzzz", "", false).is_valid()
-        );
-        assert_eq!(
-            true,
-            Release::new("canary_release", "xxxxyyyyzzzz", "", false).is_valid()
-        );
-    }
+    use std::fs::File;
+    use std::io::BufReader;
+    use std::path::PathBuf;
 
     #[test]
     fn test_release_is_valid_from_response() {
@@ -351,14 +338,14 @@ mod tests {
 
     #[test]
     fn test_release_to_message() {
-        assert_eq!(
-            "canary_release(xxxxxyyyyyzzzzz)",
-            Release::new("canary_release", "xxxxxyyyyyzzzzz", "", false).to_message()
-        );
-        assert_eq!(
-            "The structure of release is not correct. [name: ]",
-            Release::new("", "", "", false).to_message()
-        );
+        let response = Response::from_jsonfile(PathBuf::from("tests/fixtures/test_data.json"));
+        match response.get_release() {
+            Some(release) => assert_eq!(
+                "canary_release(46f663b32c01d20ce14f58b5d81ac0f813c4b691)",
+                release.to_message()
+            ),
+            None => assert!(false),
+        }
     }
 
     #[test]
@@ -439,49 +426,11 @@ mod tests {
         assert_eq!(true, pull_request.unwrap().is_approved());
     }
 
-    #[test]
-    fn test_parse() {
-        let response = Response::from_jsonfile(PathBuf::from("tests/fixtures/test_data.json"));
-        assert_eq!("sre-test-k8s", response.data.repository.name);
-    }
-
-    use std::fs::File;
-    use std::io::BufReader;
-    use std::path::PathBuf;
-
     impl Response {
         fn from_jsonfile(path: PathBuf) -> Response {
             let f = File::open(path).unwrap();
             let reader = BufReader::new(f);
             serde_json::from_reader(reader).unwrap()
-        }
-    }
-
-    // for test
-    impl Release {
-        fn new(
-            tag_name: &str,
-            oid: &str,
-            parent_oid: &str,
-            authored_by_committer: bool,
-        ) -> Release {
-            let mut parents = HashMap::new();
-            parents.insert(
-                "nodes".to_string(),
-                Some(vec![Parent {
-                    oid: parent_oid.to_string(),
-                    authored_by_committer: authored_by_committer,
-                }]),
-            );
-            Release {
-                tag_name: tag_name.to_string(),
-                tag: Tag {
-                    target: Target {
-                        oid: oid.to_string(),
-                        parents: parents,
-                    },
-                },
-            }
         }
     }
 }
