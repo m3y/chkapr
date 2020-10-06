@@ -156,7 +156,7 @@ impl Response {
 
 impl PullRequest {
     pub fn is_valid(&self) -> bool {
-        self.commits.nodes.len() > 0
+        !self.commits.nodes.is_empty()
     }
 
     pub fn to_message(&self) -> String {
